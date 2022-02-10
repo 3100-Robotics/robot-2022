@@ -32,7 +32,7 @@ public class VelocityDrive extends CommandBase {
     addRequirements(m_drive);
   }
 
-  public void initalize(){
+  public void initalize() {
 
     Drive.frontRight.selectProfileSlot(Constants.kSlot_Velocit, Constants.PID_PRIMARY);
 
@@ -41,13 +41,17 @@ public class VelocityDrive extends CommandBase {
   @Override
   public void execute() {
 
-    double target_RPM = m_forward.getAsDouble() * 2000;	// +- 2000 RPM
-	double target_unitsPer100ms = target_RPM * Constants.kSensorUnitsPerRotation / 600.0;	//RPM -> Native units
-	double feedFwdTerm = m_rotation.getAsDouble() * 0.10;	// Percentage added to the close loop output
-			
-			/* Configured for Velocity Closed Loop on Integrated Sensors' Sum and Arbitrary FeedForward on joyX */
-	Drive.frontRight.set(TalonFXControlMode.Velocity, target_unitsPer100ms, DemandType.ArbitraryFeedForward, feedFwdTerm);
-	Drive.frontLeft.follow(Drive.frontRight);
+    double target_RPM = m_forward.getAsDouble() * 2000; // +- 2000 RPM
+    double target_unitsPer100ms = target_RPM * Constants.kSensorUnitsPerRotation / 600.0; // RPM -> Native units
+    double feedFwdTerm = m_rotation.getAsDouble() * 0.10; // Percentage added to the close loop output
+
+    /*
+     * Configured for Velocity Closed Loop on Integrated Sensors' Sum and Arbitrary
+     * FeedForward on joyX
+     */
+    Drive.frontRight.set(TalonFXControlMode.Velocity, target_unitsPer100ms, DemandType.ArbitraryFeedForward,
+        feedFwdTerm);
+    Drive.frontLeft.follow(Drive.frontRight);
 
   }
 }

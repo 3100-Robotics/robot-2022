@@ -6,71 +6,80 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.commands.Climb;
 import frc.robot.commands.TurretLimeTurn;
 import frc.robot.commands.VelocityDrive;
 import frc.robot.commands.ZoomZoomFast;
-import frc.robot.subsystems.Collector;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import static frc.robot.Constants.*;
 import static frc.robot.Constants.OIConstants.*;
 import static frc.robot.RobotCommands.*;
 
-
-
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
 
   private final XboxController m_driveController = new XboxController(driveControllerPort);
- // private final XboxController m_techController = new XboxController(techControllerPort);
+  private final static XboxController m_techController = new XboxController(techControllerPort);
 
   public final JoystickButton turnNeg = new JoystickButton(m_driveController, backButtonChannel);
-  public final JoystickButton turnPos = new JoystickButton(m_driveController, startButtonChannel); 
+  public final JoystickButton turnPos = new JoystickButton(m_driveController, startButtonChannel);
   public final JoystickButton velocityDrive = new JoystickButton(m_driveController, rightTriggerChannel);
   public final JoystickButton limeTurn = new JoystickButton(m_driveController, xButtonChannel);
   public final JoystickButton determineDistance = new JoystickButton(m_driveController, aButtonChannel);
   public final JoystickButton findAngle = new JoystickButton(m_driveController, bButtonChannel);
 
-  // public final JoystickButton m_deployCollector = new JoystickButton(m_techController, aButtonChannel);
-  // public final JoystickButton m_groundCollect = new JoystickButton(m_techController, bButtonChannel);
-  // public final JoystickButton m_conveyorRun = new JoystickButton(m_techController, xButtonChannel);
-  // public final JoystickButton m_collectToShoot = new JoystickButton(m_techController, yButtonChannel);
+  // public final JoystickButton m_deployCollector = new
+  // JoystickButton(m_techController, aButtonChannel);
+  // public final JoystickButton m_groundCollect = new
+  // JoystickButton(m_techController, bButtonChannel);
+  // public final JoystickButton m_conveyorRun = new
+  // JoystickButton(m_techController, xButtonChannel);
+  // public final JoystickButton m_collectToShoot = new
+  // JoystickButton(m_techController, yButtonChannel);
+  // public final JoystickButton m_hoodAdjust = new
+  // JoystickButton(m_techController, startButtonChannel);
 
-  
+  // public final JoystickButton m_climberPistonToggle = new
+  // JoystickButton(m_techController, backButtonChannel);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private final SequentialCommandGroup TestGrouping = new SequentialCommandGroup(
+      new frc.robot.autonomous.autonroutes.TestGrouping());
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
     new RobotCommands();
 
     m_drive.setDefaultCommand(
-      // // A split-stick arcade command, with forward/backward controlled by the left
-      // // hand, and turning controlled by the right.
-      new ZoomZoomFast(m_drive, () -> m_driveController.getRightX(),
-          () -> -m_driveController.getLeftY()));
+        new ZoomZoomFast(m_drive, () -> m_driveController.getRightX(),
+            () -> -m_driveController.getLeftY()));
+
+    m_climber.setDefaultCommand(
+        new Climb(m_climber, () -> m_techController.getRightY()));
+
+    m_chooser.addOption("TestGrouping", TestGrouping);
+    Shuffleboard.getTab("Autonomous").add(m_chooser);
   }
 
-  
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
   private void configureButtonBindings() {
 
     turnPos.whileHeld(turnTurretPos);
@@ -82,9 +91,11 @@ public class RobotContainer {
     // m_groundCollect.whileHeld(groundCollect);
     // m_conveyorRun.whileHeld(conveyorRun);
     // m_collectToShoot.whileHeld(collectToShoot);
+    // m_hoodAdjust.whenPressed(adjustHood);
     determineDistance.whenPressed(findDistance);
     findAngle.whenPressed(findMountAngle);
 
+    // m_climberPistonToggle.whenPressed(toggleClimberSolenoids);
 
   }
 
@@ -95,6 +106,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return m_chooser.getSelected();
   }
 }
