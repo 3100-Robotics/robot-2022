@@ -20,18 +20,27 @@ public class Shooter extends SubsystemBase {
   public static WPI_TalonFX shooter = new WPI_TalonFX(MotorConstants.shooterMotorPort);
   private PeriodicIO mPeriodicIO;
 
+  //TUNE P AND D FOR SHOOTER
   public Shooter() {
 
     mPeriodicIO = new PeriodicIO();
 
+    /*A simple strategy for setting up a closed loop is to zero out all Closed-Loop Control Parameters 
+    and start with the Feed-Forward Gain. Tune this until the sensed value is close to the target under typical load. 
+    Then start increasing P gain so that the closed-loop will make up for the remaining error.
+
+    “Ramping” can be configured using configClosedloopRamp (routine or VI)
+
+    PIDF controller takes in target and sensor velocity measurements in “raw” sensor units per 100ms.
+    */
     shooter.setNeutralMode(NeutralMode.Coast);
     shooter.configClosedloopRamp(0.5, Constants.kCANTimeoutMs);
     shooter.setSensorPhase(false);
     shooter.config_kP(0, 0);
-    shooter.config_kI(0, 0);
+    //shooter.config_kI(0, 0);
     shooter.config_kD(0, 0);
     shooter.config_kF(0, 0);
-    shooter.config_IntegralZone(0, 0, 50);
+    //shooter.config_IntegralZone(0, 0, 50);
 
     shooter.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     shooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20);
@@ -49,7 +58,7 @@ public class Shooter extends SubsystemBase {
 
   public void shoot() {
 
-    shooter.set(TalonFXControlMode.Velocity, computeSpeed(mounting_angle, cameraHeight, hubHeight));
+    shooter.set(TalonFXControlMode.Velocity, computeSpeed(mounting_angle, cameraHeight, hubHeight) *  Constants.kSensorUnitsPerRotation / 600 / Constants.shooterGearRatio);
 
   }
 

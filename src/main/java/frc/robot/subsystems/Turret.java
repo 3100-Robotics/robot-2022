@@ -8,10 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 
 //import static frc.robot.Constants.*;
@@ -25,7 +22,7 @@ public class Turret extends SubsystemBase {
     private NetworkTableEntry hoodAngle = tab.addPersistent("Hood Angle", 0)
             .withProperties(Map.of("min", 0, "max", 180))
             .getEntry();
-    private double hoodAngleNumber = 0;
+    private double hoodAngleNumber;
 
     public void periodic() {
 
@@ -54,9 +51,15 @@ public class Turret extends SubsystemBase {
 
     }
 
+    //0-180
     public void adjustHood() {
 
         hoodServo.setAngle(hoodAngleNumber);
+
+    }
+    public void adjustHoodAuton(double angle) {
+
+        hoodServo.setAngle(angle);
 
     }
 
