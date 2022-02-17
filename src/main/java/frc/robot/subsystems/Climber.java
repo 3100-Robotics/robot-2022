@@ -15,7 +15,7 @@ import frc.robot.Constants.PneumaticsConstants;
 
 //two pistons when I say piston
 //two falcons when I say falcon
-// slave and master
+//slave and master
 
 //Piston should be extended all the time
 //Extends the arm using a falcon to a set-point
@@ -63,7 +63,7 @@ public class Climber extends SubsystemBase {
 
     }
 
-    public void toggleClimberSolenoids() {
+    public static void toggleClimberSolenoids() {
 
         // leftClimberSolenoid.toggle();
         // rightClimberSolenoid.toggle();

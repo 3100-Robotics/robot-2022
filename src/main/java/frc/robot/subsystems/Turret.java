@@ -6,9 +6,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
 
 //import static frc.robot.Constants.*;
@@ -23,6 +25,7 @@ public class Turret extends SubsystemBase {
             .withProperties(Map.of("min", 0, "max", 180))
             .getEntry();
     private double hoodAngleNumber;
+    public final static Spark turretMotor = new Spark(MotorConstants.turretMotorPort);
 
     public void periodic() {
 
@@ -41,7 +44,12 @@ public class Turret extends SubsystemBase {
 
     public void turn(final double speed) {
 
-        MotorConstants.turretMotor.set(speed);
+        turretMotor.set(speed);
+
+    }
+    public void stop(){
+
+        turretMotor.stopMotor();
 
     }
 

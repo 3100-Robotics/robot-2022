@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.commands.Aim;
 import frc.robot.commands.Climb;
 import frc.robot.commands.TurretLimeTurn;
 import frc.robot.commands.VelocityDrive;
@@ -38,8 +39,10 @@ public class RobotContainer {
   public final JoystickButton turnPos = new JoystickButton(m_driveController, startButtonChannel);
   public final JoystickButton velocityDrive = new JoystickButton(m_driveController, rightTriggerChannel);
   public final JoystickButton limeTurn = new JoystickButton(m_driveController, xButtonChannel);
+  public final JoystickButton limeTurn2 = new JoystickButton(m_driveController, yButtonChannel);
   public final JoystickButton determineDistance = new JoystickButton(m_driveController, aButtonChannel);
   public final JoystickButton findAngle = new JoystickButton(m_driveController, bButtonChannel);
+  
 
   // public final JoystickButton m_deployCollector = new
   // JoystickButton(m_techController, aButtonChannel);
@@ -56,9 +59,10 @@ public class RobotContainer {
   // JoystickButton(m_techController, backButtonChannel);
 
   private final SequentialCommandGroup TestGrouping = new SequentialCommandGroup(
-      new frc.robot.autonomous.autonroutes.TestGrouping());
+      new frc.robot.autonomous.autonroutes.TestGrouping(m_shooter));
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+  public static SendableChooser<String> m_position = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -75,7 +79,9 @@ public class RobotContainer {
         new Climb(m_climber, () -> m_techController.getRightY()));
 
     m_chooser.addOption("TestGrouping", TestGrouping);
+    m_position.addOption("Position1", "close");
     Shuffleboard.getTab("Autonomous").add(m_chooser);
+    Shuffleboard.getTab("Autonomous").add(m_position);
   }
 
   private void configureButtonBindings() {
@@ -83,6 +89,7 @@ public class RobotContainer {
     turnPos.whileHeld(turnTurretPos);
     turnNeg.whileHeld(turnTurretNeg);
     limeTurn.whileHeld(new TurretLimeTurn(m_turret), true);
+    limeTurn2.whileHeld(new Aim(m_turret, m_limelight, true));
     velocityDrive.whileActiveContinuous(new VelocityDrive(m_drive, () -> -m_driveController.getLeftY(),
         () -> m_driveController.getRightX()));
     // m_deployCollector.whenPressed(deployCollectorCommand);
@@ -92,6 +99,7 @@ public class RobotContainer {
     // m_hoodAdjust.whenPressed(adjustHood);
     determineDistance.whenPressed(findDistance);
     findAngle.whenPressed(findMountAngle);
+
 
     // m_climberPistonToggle.whenPressed(toggleClimberSolenoids);
 

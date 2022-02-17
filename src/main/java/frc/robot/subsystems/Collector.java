@@ -23,7 +23,7 @@ public class Collector extends SubsystemBase {
    public static final CANSparkMax conveyorMotor = new CANSparkMax(MotorConstants.conveyorMotorPort,
          MotorType.kBrushless);
 
-   public void deployCollector() {
+   public static void deployCollector() {
 
       // Set Piston to extend/retract
       // leftIntakeSolenoid.toggle();

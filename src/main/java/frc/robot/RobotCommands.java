@@ -3,6 +3,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.robot.sensors.LimelightInterface;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Drive;
@@ -16,6 +17,7 @@ public class RobotCommands {
     public final static Collector m_collector = new Collector();
     public final static Shooter m_shooter = new Shooter();
     public final static Climber m_climber = new Climber();
+    public final static LimelightInterface m_limelight = new LimelightInterface();
 
     
 

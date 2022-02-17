@@ -26,7 +26,8 @@ public class AutoShoot extends CommandBase {
 
     public void execute() {
 
-        m_shoot.shoot();
+
+        Shooter.setVelocitySpeed(m_speed);
 
     }
 

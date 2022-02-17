@@ -15,15 +15,18 @@ public class Shooter extends SubsystemBase {
 
   private double tv, tx, ty, ta;
   private double mounting_angle;
+  //TODO: Find
+  private double mountAngle = 0.0;
   private double cameraHeight;
   private double hubHeight;
+  private boolean isUpToSpeed = false;
+  private double actual_speed;
   public static WPI_TalonFX shooter = new WPI_TalonFX(MotorConstants.shooterMotorPort);
-  private PeriodicIO mPeriodicIO;
 
   //TUNE P AND D FOR SHOOTER
   public Shooter() {
 
-    mPeriodicIO = new PeriodicIO();
+    
 
     /*A simple strategy for setting up a closed loop is to zero out all Closed-Loop Control Parameters 
     and start with the Feed-Forward Gain. Tune this until the sensed value is close to the target under typical load. 
@@ -38,7 +41,7 @@ public class Shooter extends SubsystemBase {
     shooter.setSensorPhase(false);
     shooter.config_kP(0, 0);
     //shooter.config_kI(0, 0);
-    shooter.config_kD(0, 0);
+    //shooter.config_kD(0, 0);
     shooter.config_kF(0, 0);
     //shooter.config_IntegralZone(0, 0, 50);
 
@@ -49,20 +52,14 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public void periodic() {
-
-    mPeriodicIO.velocity_in_ticks_per_100ms = shooter.getSelectedSensorVelocity(0);
-    mPeriodicIO.output_percent = shooter.getMotorOutputPercent();
-
-  }
-
   public void shoot() {
 
+    
     shooter.set(TalonFXControlMode.Velocity, computeSpeed(mounting_angle, cameraHeight, hubHeight) *  Constants.kSensorUnitsPerRotation / 600 / Constants.shooterGearRatio);
 
   }
 
-  public void setVelocitySpeed(double RPM) {
+  public static void setVelocitySpeed(double RPM) {
 
     double _RPM = limit(RPM, 0, Constants.MAX_RPM);
 
@@ -94,8 +91,8 @@ public class Shooter extends SubsystemBase {
     System.out.println("Distance: ");
     ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
     // 0.36 is mounting angle
-    System.out.println((objectHeight - cameraHeight) / (Math.tan(0.367722982582348 + ty)));
-    return (objectHeight - cameraHeight) / (Math.tan(0.367722982582348 + ty));
+    System.out.println((objectHeight - cameraHeight) / (Math.tan(mountAngle + ty)));
+    return (objectHeight - cameraHeight) / (Math.tan(mountAngle + ty));
   }
 
   /*
@@ -110,15 +107,6 @@ public class Shooter extends SubsystemBase {
     System.out.println(mounting_angle);
   }
 
-  private static class PeriodicIO {
-    // inputs
-    public double velocity_in_ticks_per_100ms;
-    public double output_percent;
-
-    // outputs
-    public double setpoint_rpm;
-  }
-
   public static double limit(double value, double limitValLow, double limitValHigh) {
     if (value > limitValHigh) {
       return limitValHigh;
@@ -127,6 +115,15 @@ public class Shooter extends SubsystemBase {
       return limitValLow;
     }
     return value;
+  }
+
+  public void periodic() {
+
+
+
+   // if((shooter.getSelectedSensorVelocity() * Constants.shooterEncoderRatio * 10) ==   )
+   // shooter.getSelectedSensorVelocity()
+
   }
 
 }

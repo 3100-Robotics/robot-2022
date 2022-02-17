@@ -27,16 +27,11 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.MotorConstants;
 
 public class Drive extends SubsystemBase {
-
-  private final static double kEncoderCPR = 2048;
-  private final static double kGearReduction = 10.71;
-  private final static double wheelDiameterMeters = 0.1524;
-  private final static double kDistancePerWheelRevolutionMeters = wheelDiameterMeters * Math.PI;
-
-  public static final double kMagMultiplier = (((kEncoderCPR * kGearReduction) / kDistancePerWheelRevolutionMeters));
+  
 
   /** Config Objects for motor controllers */
   TalonFXConfiguration _leftConfig = new TalonFXConfiguration();
@@ -215,25 +210,25 @@ public class Drive extends SubsystemBase {
   double getLeftPosition() {
     // Native units are encoder ticks (2048 ticks per revolution)
     return // -1 *
-    frontLeft.getSelectedSensorPosition() / kMagMultiplier;
+    frontLeft.getSelectedSensorPosition() / DriveConstants.kMagMultiplier;
   }
 
   double getRightPosition() {
     // Native units are encoder ticks (2048 ticks per revolution)
     return // -1 *
-    frontRight.getSelectedSensorPosition() / kMagMultiplier;
+    frontRight.getSelectedSensorPosition() / DriveConstants.kMagMultiplier;
   }
 
   double getLeftVelocity() {
     // Native units are encoder ticks per 100ms
     return // -1 *
-    frontLeft.getSelectedSensorVelocity() / kMagMultiplier;
+    frontLeft.getSelectedSensorVelocity() / DriveConstants.kMagMultiplier;
   }
 
   double getRightVelocity() {
     // Native units are encoder ticks per 100ms
     return // -1 *
-    frontRight.getSelectedSensorVelocity() / kMagMultiplier;
+    frontRight.getSelectedSensorVelocity() / DriveConstants.kMagMultiplier;
   }
 
   /**

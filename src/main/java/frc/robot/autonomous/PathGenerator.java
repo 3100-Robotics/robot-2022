@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.subsystems.Drive;
 
 public class PathGenerator extends CommandBase {
@@ -39,15 +40,15 @@ public class PathGenerator extends CommandBase {
         RamseteCommand ramseteCommand = new RamseteCommand(
                 exampleTrajectory,
                 m_robotDrive::getPose,
-                new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
+                new RamseteController(TrajectoryConstants.kRamseteB, TrajectoryConstants.kRamseteZeta),
                 new SimpleMotorFeedforward(
-                        Constants.ksVolts,
-                        Constants.kvVoltSecondsPerMeter,
-                        Constants.kaVoltSecondsSquaredPerMeter),
-                Constants.kDriveKinematics,
+                    TrajectoryConstants.ksVolts,
+                    TrajectoryConstants.kvVoltSecondsPerMeter,
+                    TrajectoryConstants.kaVoltSecondsSquaredPerMeter),
+                    TrajectoryConstants.kDriveKinematics,
                 m_robotDrive::getWheelSpeeds,
-                new PIDController(Constants.kPDriveVel, 0, 0),
-                new PIDController(Constants.kPDriveVel, 0, 0),
+                new PIDController(TrajectoryConstants.kPDriveVel, 0, 0),
+                new PIDController(TrajectoryConstants.kPDriveVel, 0, 0),
                 // RamseteCommand passes volts to the callback
                 m_robotDrive::tankDriveVolts,
                 m_robotDrive);

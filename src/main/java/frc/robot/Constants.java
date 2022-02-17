@@ -34,10 +34,12 @@ public final class Constants {
    public final static double kNeutralDeadband = 0.001;
    public final static int kTimeoutMs = 30;
    public final static int kSensorUnitsPerRotation = 2048;
-   public static final int kCANTimeoutMs = 10;
+   public final static int kCANTimeoutMs = 10;
+   
 
    // FIND OUT
    public static final double shooterGearRatio = 0.0;
+   public final static double shooterEncoderRatio = kSensorUnitsPerRotation / 600 / shooterGearRatio;
    public static final double MAX_RPM = 6380 * shooterGearRatio;
 
    public final static int kForwardSoftLimit_Quad = +2048 * 5; /* 5 rotations assuming FX Integrated Sensor */
@@ -64,12 +66,14 @@ public final class Constants {
    public final static int kSlot_Velocit = SLOT_2;
    public final static int kSlot_MotProf = SLOT_3;
 
-   public static final double kTrackwidthMeters = 0.66;
-   public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
+   public static final class TrajectoryConstants {
+
+      public static final double kTrackwidthMeters = 0.66;
+      public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
          kTrackwidthMeters);
-   public static final double ksVolts = 0.68;
-   public static final double kvVoltSecondsPerMeter = 2.23;
-   public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+      public static final double ksVolts = 0.68;
+      public static final double kvVoltSecondsPerMeter = 2.23;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
    // 2.3
    public static final double kPDriveVel = 2.35;
 
@@ -78,6 +82,8 @@ public final class Constants {
 
    public static final double kRamseteB = 2;
    public static final double kRamseteZeta = 0.7;
+
+   }
 
    public static final class OIConstants {
       // === XBOX CHANNELS === //
@@ -109,8 +115,9 @@ public final class Constants {
 
    public static final class MotorConstants {
 
-      public final static Spark turretMotor = new Spark(4);
+      
 
+      
       public final static int frontLeftDrivePort = 1;
       public final static int backLeftDrivePort = 2;
       public final static int frontRightDrivePort = 3;
@@ -118,9 +125,10 @@ public final class Constants {
       public final static int collectorMotorPort = 5;
       public final static int conveyorMotorPort = 6;
       public final static int hoodServoPort = 7;
-      public final static int shooterMotorPort = 8;
-      public final static int leftClimberMotorPort = 9;
-      public final static int rightClimberMotorPort = 10;
+      public final static int turretMotorPort = 8;
+      public final static int shooterMotorPort = 9;
+      public final static int leftClimberMotorPort = 10;
+      public final static int rightClimberMotorPort = 11;
 
    }
 
@@ -131,6 +139,21 @@ public final class Constants {
 
       public final static int leftClimberSolenoidPort = 3;
       public final static int rightClimberSolenoidPort = 4;
+
+   }
+
+   public static final class DriveConstants {
+
+  private final static double kEncoderCPR = 2048;
+      //TODO: FIND 
+  private final static double kGearReduction = 10.71;
+  private final static double wheelDiameterMeters = 0.1524;
+  private final static double kDistancePerWheelRevolutionMeters = wheelDiameterMeters * Math.PI;
+
+  public static final double kMagMultiplier = (((kEncoderCPR * kGearReduction) / kDistancePerWheelRevolutionMeters));
+
+//   private double encoderConstant = (1 / kGearReduction) * (1 / ENCODER_EDGES_PER_REV);
+//   private double encoderConstantVelocity = (1 / kGearReduction) * (1 / ENCODER_EDGES_PER_REV) * 10;
 
    }
 
