@@ -37,7 +37,7 @@ public class AutoClimberArm extends CommandBase {
    
 
     public void execute() {
-        Climber.leftClimberMotor.set(ControlMode.Position, rev); //0.35
+        Climber.leftClimberMotor.set(ControlMode.Position, rev);
     }
     // @Override
     public boolean isFinished() {

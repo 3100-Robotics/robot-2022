@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.Drivetrain;
 
 import java.util.function.DoubleSupplier;
 
@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Drive;
 
 /**
  * Code should inline a command this simple with

@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -20,8 +22,16 @@ public class Collector extends SubsystemBase {
    // PneumaticsConstants.rightIntakeSolenoidPort);
    public static final CANSparkMax collectorMotor = new CANSparkMax(MotorConstants.collectorMotorPort,
          MotorType.kBrushless);
-   public static final CANSparkMax conveyorMotor = new CANSparkMax(MotorConstants.conveyorMotorPort,
+   public CANSparkMax conveyorMotor = new CANSparkMax(MotorConstants.conveyorMotorPort,
          MotorType.kBrushless);
+
+         public Collector(){
+
+            conveyorMotor.restoreFactoryDefaults();
+
+            conveyorMotor.setIdleMode(IdleMode.kBrake);
+
+         }
 
    public static void deployCollector() {
 
@@ -38,6 +48,7 @@ public class Collector extends SubsystemBase {
 
    public void conveyorRun(double speed) {
 
+      System.out.println("CONVEYOR");
       conveyorMotor.set(speed);
 
    }

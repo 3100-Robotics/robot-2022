@@ -3,10 +3,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.robot.Drivetrain.Drive;
+import frc.robot.autonomous.PathGenerator;
 import frc.robot.sensors.LimelightInterface;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Collector;
-import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
@@ -18,6 +19,7 @@ public class RobotCommands {
     public final static Shooter m_shooter = new Shooter();
     public final static Climber m_climber = new Climber();
     public final static LimelightInterface m_limelight = new LimelightInterface();
+    public final static PathGenerator m_pathGenerator = new PathGenerator(m_drive);
 
     
 
@@ -65,7 +67,7 @@ public class RobotCommands {
     );
 
     public final static InstantCommand adjustHood = new InstantCommand(
-    () -> m_turret.adjustHood()
+    () -> m_turret.adjustHoodAuton(20)
     );
 
     public final static StartEndCommand groundCollect = new StartEndCommand(
@@ -75,7 +77,7 @@ public class RobotCommands {
     );
 
     public final static StartEndCommand conveyorRun = new StartEndCommand(
-        () -> m_collector.conveyorRun(0.4),
+        () -> m_collector.conveyorRun(0.6),
         () -> m_collector.conveyorRun(0.0),
     m_collector
     );
@@ -84,6 +86,12 @@ public class RobotCommands {
         () -> m_collector.collectToShoot(0.4),
         () -> m_collector.collectToShoot(0.0),
     m_collector
+    );
+
+    public final static StartEndCommand shootSpee = new StartEndCommand(
+        () -> m_shooter.shootPercent(14.0),
+        () -> m_shooter.shootPercent(0.0),
+    m_shooter
     );
 
 }

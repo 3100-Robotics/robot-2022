@@ -10,6 +10,7 @@ package frc.robot.autonomous.autoncommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -50,7 +51,7 @@ public void initialize() {
   @Override
 public void execute() {
     if ((System.currentTimeMillis() - startTime) < (timeOutMs - 2000)) {
-      actual_speed = Shooter.shooter.getSelectedSensorVelocity() * Constants.shooterEncoderRatio;
+      actual_speed = Shooter.shooter.getSelectedSensorVelocity() * ShooterConstants.shooterSensorToRealDistanceFactor;//Constants.shooterEncoderRatio;
       if (actual_speed < TARGET_RUN_SPEED_SHOOTER - RUN_TOLERANCE_SHOOTER) {
         current_speed = 1.0; // speed up as quickly as possible
       } else if (actual_speed < TARGET_RUN_SPEED_SHOOTER + RUN_TOLERANCE_SHOOTER) {
@@ -59,7 +60,7 @@ public void execute() {
         // implies actual_speed >= TARGET_RUN_SPEED_SHOOTER + RUN_TOLERANCE_SHOOTER
         current_speed = SLOW_RUN_SPEED_SHOOTER;
       }
-      Shooter.setVelocitySpeed(current_speed);
+     // Shooter.setVelocitySpeed(current_speed);
 
     }
   }

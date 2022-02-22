@@ -35,12 +35,7 @@ public final class Constants {
    public final static int kTimeoutMs = 30;
    public final static int kSensorUnitsPerRotation = 2048;
    public final static int kCANTimeoutMs = 10;
-   
 
-   // FIND OUT
-   public static final double shooterGearRatio = 0.0;
-   public final static double shooterEncoderRatio = kSensorUnitsPerRotation / 600 / shooterGearRatio;
-   public static final double MAX_RPM = 6380 * shooterGearRatio;
 
    public final static int kForwardSoftLimit_Quad = +2048 * 5; /* 5 rotations assuming FX Integrated Sensor */
    public final static int kReverseSoftLimit_Quad = -2048 * 5; /* 5 rotations assuming FX Integrated Sensor */
@@ -68,14 +63,14 @@ public final class Constants {
 
    public static final class TrajectoryConstants {
 
-      public static final double kTrackwidthMeters = 0.66;
+      public static final double kTrackwidthMeters = 0.6617;
       public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
          kTrackwidthMeters);
-      public static final double ksVolts = 0.68;
-      public static final double kvVoltSecondsPerMeter = 2.23;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+      public static final double ksVolts = 0.62875;
+      public static final double kvVoltSecondsPerMeter = 2.7587;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.117;
    // 2.3
-   public static final double kPDriveVel = 2.35;
+   public static final double kPDriveVel = 2.36;
 
    public static final double kMaxSpeedMetersPerSecond = 3;
    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -115,20 +110,26 @@ public final class Constants {
 
    public static final class MotorConstants {
 
-      
-
-      
+      public final static int hoodServoPort = 0;
       public final static int frontLeftDrivePort = 1;
       public final static int backLeftDrivePort = 2;
       public final static int frontRightDrivePort = 3;
       public final static int backRightDrivePort = 4;
       public final static int collectorMotorPort = 5;
       public final static int conveyorMotorPort = 6;
-      public final static int hoodServoPort = 7;
       public final static int turretMotorPort = 8;
       public final static int shooterMotorPort = 9;
       public final static int leftClimberMotorPort = 10;
       public final static int rightClimberMotorPort = 11;
+
+   }
+
+   public static final class TurretConstants {
+
+      public final static int turretForwardSoftLimit = 6;
+      public final static int turretReverseSoftLimit = 6;
+      public final static double forwardTolerance = 0.25;
+      public final static double reverseTolerance = 0.25;
 
    }
 
@@ -144,16 +145,38 @@ public final class Constants {
 
    public static final class DriveConstants {
 
-  private final static double kEncoderCPR = 2048;
-      //TODO: FIND 
-  private final static double kGearReduction = 10.71;
-  private final static double wheelDiameterMeters = 0.1524;
-  private final static double kDistancePerWheelRevolutionMeters = wheelDiameterMeters * Math.PI;
+/*
 
-  public static final double kMagMultiplier = (((kEncoderCPR * kGearReduction) / kDistancePerWheelRevolutionMeters));
+ private final double wheelRadius = Units.inchesToMeters(2.0);
+  private final double gearRatio = (12.0 / 44.0) * (24.0 / 50.0);
+  //(ticks/output meters) = (ticks/motor rotation)/(gearRatio output rotations/motor rotation)/(2pi*wheelRadius meters/output rotation)
+  private final double ticksPerMeter = 2048.0 / gearRatio / (2.0 * Math.PI * wheelRadius);
+  private final double drivetrainWidth = Units.inchesToMeters(24.660);
+
+*/
+
+
+      //TODO: FIND 
+  private final static double kGearReduction = 8.68;
+  private final static double driveWheelDiameterInches = 4;
+//   private final static double kDistancePerWheelRevolutionMeters = wheelDiameterMeters * Math.PI;
+
+//   public static final double kMagMultiplier = (((kEncoderCPR * kGearReduction) / kDistancePerWheelRevolutionMeters));
+  public static final double driveSensorToRealDistanceFactor = (10.0 / kSensorUnitsPerRotation) * kGearReduction * (driveWheelDiameterInches * Math.PI / 12);
 
 //   private double encoderConstant = (1 / kGearReduction) * (1 / ENCODER_EDGES_PER_REV);
 //   private double encoderConstantVelocity = (1 / kGearReduction) * (1 / ENCODER_EDGES_PER_REV) * 10;
+
+   }
+
+   public static final class ShooterConstants {
+
+      //TODO: FIND OUT
+      public static final double shooterGearRatio = 1.125;
+      public final static int shooterWheelDiameterInches = 4;
+      //Sens units / 100ms <=> rps <=> gearing <=> wheel circumference
+      public final static double shooterSensorToRealDistanceFactor = (10.0 / kSensorUnitsPerRotation) * shooterGearRatio * (shooterWheelDiameterInches * Math.PI / 12);
+      public static final double MAX_RPM = 6380 * shooterGearRatio;
 
    }
 

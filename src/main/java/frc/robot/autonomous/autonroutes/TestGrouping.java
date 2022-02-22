@@ -2,10 +2,10 @@ package frc.robot.autonomous.autonroutes;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
+import frc.robot.Drivetrain.Drive;
 import frc.robot.autonomous.PathGenerator;
 import frc.robot.autonomous.autoncommands.AutoAdjustHood;
 import frc.robot.autonomous.autoncommands.AutoShoot;
-import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Shooter;
 
 public class TestGrouping extends SequentialCommandGroup {
@@ -17,10 +17,10 @@ public class TestGrouping extends SequentialCommandGroup {
 
                 super(
 
-                   // PathGenerator.generateTrajectory("Testing A Curve")
-                   //0-180
-                   new AutoAdjustHood(60.0),
-                   new AutoShoot(shooter, 2, 5000.0)
+                    PathGenerator.generateTrajectory("Straight")
+                //    //0-180
+                //    new AutoAdjustHood(60.0),
+                //    new AutoShoot(shooter, 2, 5000.0)
 
                     );
 

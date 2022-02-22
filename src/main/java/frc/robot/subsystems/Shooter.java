@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConstants;
+import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
 
@@ -32,12 +33,12 @@ public class Shooter extends SubsystemBase {
     and start with the Feed-Forward Gain. Tune this until the sensed value is close to the target under typical load. 
     Then start increasing P gain so that the closed-loop will make up for the remaining error.
 
-    “Ramping” can be configured using configClosedloopRamp (routine or VI)
+    Ramping can be configured using configClosedloopRamp (routine or VI)
 
-    PIDF controller takes in target and sensor velocity measurements in “raw” sensor units per 100ms.
+    PIDF controller takes in target and sensor velocity measurements in raw sensor units per 100ms.
     */
     shooter.setNeutralMode(NeutralMode.Coast);
-    shooter.configClosedloopRamp(0.5, Constants.kCANTimeoutMs);
+    //shooter.configClosedloopRamp(0.5, Constants.kCANTimeoutMs);
     shooter.setSensorPhase(false);
     shooter.config_kP(0, 0);
     //shooter.config_kI(0, 0);
@@ -55,17 +56,24 @@ public class Shooter extends SubsystemBase {
   public void shoot() {
 
     
-    shooter.set(TalonFXControlMode.Velocity, computeSpeed(mounting_angle, cameraHeight, hubHeight) *  Constants.kSensorUnitsPerRotation / 600 / Constants.shooterGearRatio);
+    shooter.set(TalonFXControlMode.Velocity, computeSpeed(mounting_angle, cameraHeight, hubHeight) * ShooterConstants.shooterSensorToRealDistanceFactor); //Constants.kSensorUnitsPerRotation / 600 / Constants.shooterGearRatio);
 
   }
 
-  public static void setVelocitySpeed(double RPM) {
+  public void shootPercent(double speed) {
 
-    double _RPM = limit(RPM, 0, Constants.MAX_RPM);
+    shooter.set(TalonFXControlMode.Current, -speed);
+
+  }
+
+  public void setVelocitySpeed(double RPM) {
+
+    System.out.println("SHOOTING");
+    double _RPM = limit(RPM, 0, ShooterConstants.MAX_RPM);
 
     shooter.set(
         TalonFXControlMode.Velocity,
-        (_RPM * Constants.kSensorUnitsPerRotation / 600 / Constants.shooterGearRatio));
+        (_RPM * ShooterConstants.shooterSensorToRealDistanceFactor));//Constants.kSensorUnitsPerRotation / 600 / Constants.shooterGearRatio));
   }
 
   public void stopShoot() {
