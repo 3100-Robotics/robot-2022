@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
@@ -17,6 +18,7 @@ public class Shooter extends SubsystemBase {
   private double tv, tx, ty, ta;
   private double mounting_angle;
   //TODO: Find
+  private double maxVelocity = -21666;
   private double mountAngle = 0.0;
   private double cameraHeight;
   private double hubHeight;
@@ -39,17 +41,18 @@ public class Shooter extends SubsystemBase {
     */
     shooter.setNeutralMode(NeutralMode.Coast);
     //shooter.configClosedloopRamp(0.5, Constants.kCANTimeoutMs);
-    shooter.setSensorPhase(false);
-    shooter.config_kP(0, 0);
-    //shooter.config_kI(0, 0);
-    //shooter.config_kD(0, 0);
-    shooter.config_kF(0, 0);
+    // shooter.setSensorPhase(false);
+    // shooter.config_kP(0, 0);
+    // //shooter.config_kI(0, 0);
+    // //shooter.config_kD(0, 0);
+    // shooter.config_kF(0, 0);
     //shooter.config_IntegralZone(0, 0, 50);
 
     shooter.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    shooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20);
+    //shooter.configClosedloopRamp(0.25);
+    //shooter.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20);
 
-    shooter.selectProfileSlot(0, 0);
+   // shooter.selectProfileSlot(0, 0);
 
   }
 
@@ -62,9 +65,18 @@ public class Shooter extends SubsystemBase {
 
   public void shootPercent(double speed) {
 
-    shooter.set(TalonFXControlMode.Current, -speed);
+    shooter.set(TalonFXControlMode.PercentOutput, -speed);
 
   }
+
+  public double getVelocity() {
+    return shooter.getSelectedSensorVelocity() / maxVelocity;
+
+  }
+  public void setPercentVelocity(double percentVelocity) {
+    shooter.set(TalonFXControlMode.Velocity, maxVelocity * percentVelocity);
+  }
+ 
 
   public void setVelocitySpeed(double RPM) {
 

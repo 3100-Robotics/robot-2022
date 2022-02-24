@@ -169,26 +169,26 @@ public class Drive extends SubsystemBase {
   double getLeftPosition() {
     // Native units are encoder ticks (2048 ticks per revolution)
     return // -1 *
-    frontLeft.getSelectedSensorPosition() * DriveConstants.driveSensorToRealDistanceFactor;
+    frontLeft.getSelectedSensorPosition() * DriveConstants.encoderScale;
     // / DriveConstants.kMagMultiplier;
   }
 
   double getRightPosition() {
     // Native units are encoder ticks (2048 ticks per revolution)
     return // -1 *
-    frontRight.getSelectedSensorPosition() * DriveConstants.driveSensorToRealDistanceFactor;
+    frontRight.getSelectedSensorPosition() * DriveConstants.encoderScale;
   }
 
   double getLeftVelocity() {
     // Native units are encoder ticks per 100ms
     return // -1 *
-    frontLeft.getSelectedSensorVelocity() * DriveConstants.driveSensorToRealDistanceFactor;
+    frontLeft.getSelectedSensorVelocity() * DriveConstants.encoderScale;
   }
 
   double getRightVelocity() {
     // Native units are encoder ticks per 100ms
     return // -1 *
-    frontRight.getSelectedSensorVelocity() * DriveConstants.driveSensorToRealDistanceFactor;
+    frontRight.getSelectedSensorVelocity() * DriveConstants.encoderScale;
   }
 
   /**

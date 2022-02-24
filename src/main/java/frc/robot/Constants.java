@@ -155,16 +155,21 @@ public final class Constants {
 
 */
 
+//Convert 2048/1
+
+
+
 
       //TODO: FIND 
   private final static double kGearReduction = 8.68;
   private final static double driveWheelDiameterInches = 4;
+  private final static double driveWheelRadiusMeters = 0.0508;
 //   private final static double kDistancePerWheelRevolutionMeters = wheelDiameterMeters * Math.PI;
 
 //   public static final double kMagMultiplier = (((kEncoderCPR * kGearReduction) / kDistancePerWheelRevolutionMeters));
-  public static final double driveSensorToRealDistanceFactor = (10.0 / kSensorUnitsPerRotation) * kGearReduction * (driveWheelDiameterInches * Math.PI / 12);
+ // public static final double driveSensorToRealDistanceFactor = (10.0 / kSensorUnitsPerRotation) * kGearReduction * (driveWheelDiameterInches * Math.PI / 12);
 
-//   private double encoderConstant = (1 / kGearReduction) * (1 / ENCODER_EDGES_PER_REV);
+   public static double encoderScale = (1 / kGearReduction) * (1 / kSensorUnitsPerRotation) * (2 * Math.PI * driveWheelRadiusMeters);
 //   private double encoderConstantVelocity = (1 / kGearReduction) * (1 / ENCODER_EDGES_PER_REV) * 10;
 
    }

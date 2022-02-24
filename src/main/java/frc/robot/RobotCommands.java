@@ -77,7 +77,7 @@ public class RobotCommands {
     );
 
     public final static StartEndCommand conveyorRun = new StartEndCommand(
-        () -> m_collector.conveyorRun(0.6),
+        () -> m_collector.conveyorRun(0.8),
         () -> m_collector.conveyorRun(0.0),
     m_collector
     );
@@ -89,9 +89,11 @@ public class RobotCommands {
     );
 
     public final static StartEndCommand shootSpee = new StartEndCommand(
-        () -> m_shooter.shootPercent(14.0),
+        () -> m_shooter.shootPercent(1.0),
         () -> m_shooter.shootPercent(0.0),
     m_shooter
     );
+
+  
 
 }
