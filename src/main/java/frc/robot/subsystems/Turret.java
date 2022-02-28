@@ -174,10 +174,12 @@ public class Turret extends SubsystemBase {
         hoodServo.setAngle(hoodAngleNumber);
 
     }
-    public void adjustHoodAuton(double angle) {
+    public static void adjustHoodAuton(double angle) {
 
+        System.out.println("Adjusting");
         hoodServo.setAngle(angle);
 
     }
+    
 
 }

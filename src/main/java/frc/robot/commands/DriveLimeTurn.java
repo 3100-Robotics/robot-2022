@@ -112,6 +112,7 @@ public class DriveLimeTurn extends CommandBase {
     else {
 
       stop = true;
+      //if (reflectiveTarget == 1.0) {
       // System.out.println("Not in Sight");
 
       // while(Math.abs(x) > 10){
@@ -135,7 +136,10 @@ public class DriveLimeTurn extends CommandBase {
       // System.out.println("slower");
 
       // }
+    //}
+    //else{
       // stop = true;
+      //}
     }
   }
 

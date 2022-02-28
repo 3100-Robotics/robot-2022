@@ -135,10 +135,10 @@ public final class Constants {
 
    public static final class PneumaticsConstants {
 
-      public final static int leftIntakeSolenoidPort = 1;
+      public final static int leftIntakeSolenoidPort = 7;
       public final static int rightIntakeSolenoidPort = 2;
 
-      public final static int leftClimberSolenoidPort = 3;
+      public final static int leftClimberSolenoidPort = 6;
       public final static int rightClimberSolenoidPort = 4;
 
    }
@@ -174,14 +174,29 @@ public final class Constants {
 
    }
 
+   public static final class LimelightConstants {
+
+      //In Meters
+      public final static double LL_TARGET_HEIGHT = 2.6416;
+      public final static double LL_MOUNT_ANGLE = 30.0;
+      public final static double LL_MOUNT_HEIGHT = 0.6096;
+
+
+   }
+
    public static final class ShooterConstants {
 
       //TODO: FIND OUT
-      public static final double shooterGearRatio = 1.125;
-      public final static int shooterWheelDiameterInches = 4;
+      public final static double shooterGearRatio = 1.125;
+      public final static double shooterWheelDiameterInches = 2;
+      public final static double shooterWheelRadiusMeters = 0.0508;
       //Sens units / 100ms <=> rps <=> gearing <=> wheel circumference
-      public final static double shooterSensorToRealDistanceFactor = (10.0 / kSensorUnitsPerRotation) * shooterGearRatio * (shooterWheelDiameterInches * Math.PI / 12);
+      public final static double shooterSensorToRealDistanceFactor = (1 / shooterGearRatio) * (1 / kSensorUnitsPerRotation) * (2 * Math.PI * shooterWheelRadiusMeters);
       public static final double MAX_RPM = 6380 * shooterGearRatio;
+      public final static double SHOOTER_TOLERANCE = 25;
+
+      public final static double TARMAC_SHOOT_SPEED = 0.8;
+      public final static double LAUNCH_SHOOT_SPEED = 0.95;
 
    }
 

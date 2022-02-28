@@ -21,10 +21,13 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -55,6 +58,12 @@ public class Drive extends SubsystemBase {
        backRight,
       frontRight);
 
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+    private NetworkTableEntry leftVelo = tab.add("Left Velocity", 0)
+            .getEntry();
+    private NetworkTableEntry rightVelo = tab.add("Right Velocity", 0)
+            .getEntry();
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
@@ -71,14 +80,21 @@ public class Drive extends SubsystemBase {
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
   }
 
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
+
     double leftDist = getLeftPosition();
     double rightDist = getRightPosition();
     double leftVel = getLeftVelocity();
     double rightVel = getRightVelocity();
 
+
+    leftVelo.setDouble(leftVel);
+    rightVelo.setDouble(rightVel);
+
+    
     SmartDashboard.putNumber("LeftDistance", leftDist);
     SmartDashboard.putNumber("RightDistance", rightDist);
     SmartDashboard.putNumber("LeftVelocity", leftVel);
@@ -134,12 +150,20 @@ public class Drive extends SubsystemBase {
     forward = Deadband(forward);
     turn = Deadband(turn);
 
-     forward *= forward * forward;
-     turn *= turn * turn;
+
+    forward = Math.copySign(forward*forward, forward);
+    turn = Math.copySign(turn*turn, turn);
+     //turn *= turn * turn;
 
     // frontLeft.set(TalonFXControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, +turn);
     // frontRight.set(TalonFXControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, -turn);
      m_drive.arcadeDrive(forward, turn);
+  }
+
+  public void autoArcadeDrive(double forward, double turn){
+
+    m_drive.arcadeDrive(forward, turn);
+
   }
 
   public void curvatureDrive(double xSpeed, double zRotation, boolean allowTurnInPlace){
@@ -156,7 +180,9 @@ public class Drive extends SubsystemBase {
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     frontLeft.setVoltage(leftVolts);
+    backLeft.setVoltage(leftVolts);
     frontRight.setVoltage(rightVolts);
+    backRight.setVoltage(rightVolts);
     m_drive.feed();
   }
 
@@ -178,6 +204,10 @@ public class Drive extends SubsystemBase {
     return // -1 *
     frontRight.getSelectedSensorPosition() * DriveConstants.encoderScale;
   }
+
+  public double getAverageEncoderDistance() {
+    return (getLeftPosition() + getRightPosition()) / 2.0;
+}
 
   double getLeftVelocity() {
     // Native units are encoder ticks per 100ms
@@ -292,11 +322,11 @@ public class Drive extends SubsystemBase {
 
   double Deadband(double value) {
     /* Upper deadband */
-    if (value >= +0.05)
+    if (value >= +0.1)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.05)
+    if (value <= -0.1)
       return value;
 
     /* Outside deadband */
@@ -391,27 +421,27 @@ public class Drive extends SubsystemBase {
     //rightMotorLeader.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, currentLimit, currentThreshold, currentThresholdTime));
 
     //Might break
-    frontLeft.setSensorPhase(true);
-    frontRight.setSensorPhase(true);
+    // frontLeft.setSensorPhase(true);
+    // frontRight.setSensorPhase(true);
 
-    frontLeft.setSelectedSensorPosition(0);
-    frontRight.setSelectedSensorPosition(0);
+    // frontLeft.setSelectedSensorPosition(0);
+    // frontRight.setSelectedSensorPosition(0);
 
     // Add PID constants
-    frontLeft.config_kP(0, 0);
-    frontLeft.config_kI(0, 0);
-    frontLeft.config_kD(0, 0);
-    frontLeft.config_kF(0, 0);
-    // leftMotorLeader.configMaxIntegralAccumulator(0, 400);
+    // frontLeft.config_kP(0, 0);
+    // frontLeft.config_kI(0, 0);
+    // frontLeft.config_kD(0, 0);
+    // frontLeft.config_kF(0, 0);
+    // // leftMotorLeader.configMaxIntegralAccumulator(0, 400);
 
-    frontRight.config_kP(0, 0);
-    frontRight.config_kI(0, 0);
-    frontRight.config_kD(0, 0);
-    frontRight.config_kF(0, 0);
-    // rightMotorLeader.configMaxIntegralAccumulator(0, 400);
+    // frontRight.config_kP(0, 0);
+    // frontRight.config_kI(0, 0);
+    // frontRight.config_kD(0, 0);
+    // frontRight.config_kF(0, 0);
+    // // rightMotorLeader.configMaxIntegralAccumulator(0, 400);
  
-    frontLeft.setIntegralAccumulator(0);
-    frontRight.setIntegralAccumulator(0);
+    // frontLeft.setIntegralAccumulator(0);
+    // frontRight.setIntegralAccumulator(0);
   }
 
 }

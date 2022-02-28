@@ -12,9 +12,13 @@ import java.nio.file.Path;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -26,10 +30,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  String trajectoryJSON = "paths/YourPath.wpilib.json";
+  //static Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+  //tring trajectoryJSON = "paths/YourPath.wpilib.json";
   Trajectory trajectory = new Trajectory();
 
   private RobotContainer m_robotContainer;
+ // PowerDistribution examplePD = new PowerDistribution(0, ModuleType.kCTRE);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -96,6 +102,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
+  //  pcmCompressor.disable();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -103,7 +111,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    //System.out.println(examplePD.getVoltage());
+
+  }
 
   @Override
   public void testInit() {

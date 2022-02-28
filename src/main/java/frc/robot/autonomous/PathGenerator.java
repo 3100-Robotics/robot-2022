@@ -43,7 +43,7 @@ public class PathGenerator extends CommandBase {
 
         // An example trajectory to follow. All units in meters.
         // Name of the path, maxVelocity, maxAcceleration
-        Trajectory exampleTrajectory = PathPlanner.loadPath("Testing A Curve", 8, 5);
+        Trajectory exampleTrajectory = PathPlanner.loadPath(pathName, 4, 2);
 
     //     var autoVoltageConstraint =
     //     new DifferentialDriveVoltageConstraint(

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shootercommands;
+package frc.robot.commands.shootercommands.Old;
 
 import java.util.stream.Collector;
 

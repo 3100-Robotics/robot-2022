@@ -11,15 +11,21 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LimelightConstants;
 
 public class LimelightInterface extends SubsystemBase {
 
   // Limelight docs say to use at least 11ms
   private static final double imageCaptureLatency = 11; // ms
 
-  private NetworkTableEntry targetValid;
+  private double tv, tx;
+
+  private static double ty;
+
+  private double ta;
+  private static NetworkTableEntry targetValid;
   private NetworkTableEntry horizAngle;
-  private NetworkTableEntry vertAngle;
+  private static NetworkTableEntry vertAngle;
   private NetworkTableEntry area;
   private NetworkTableEntry skew;
   private NetworkTableEntry pipelineLatency;
@@ -100,6 +106,44 @@ public class LimelightInterface extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+
+  public static double getRobotToTargetDistance() {
+		return (LimelightConstants.LL_TARGET_HEIGHT - LimelightConstants.LL_MOUNT_HEIGHT) / Math.tan(Math.toRadians(LimelightConstants.LL_MOUNT_ANGLE + getTargetVertAngle()));
+	}
+	
+	// public double getShooterLaunchVelocity() {
+	// 	double g = 9.81;
+	// 	double y = LimelightConstants.LL_TARGET_HEIGHT;
+	// 	double x = getRobotToTargetDistance();
+	// 	double launchAngle = LimelightConstants.SHOOTER_LAUNCH_ANGLE; // Set to proper value
+	// 	double tanA = Math.tan(Math.toRadians(launchAngle));
+	// 	double upper = Math.sqrt(g) * Math.sqrt(x) * Math.sqrt(Math.pow(tanA, 2) + 1);
+	// 	double lower = Math.sqrt(2 * tanA - ((2 * y) / x));
+	// 	return Units.metersToFeet(upper / lower);
+	// }
+
+  // For the shooter. Given what the limelight sees and the shooter angle, compute
+  // the desired initial speed for the shooter.
+  public static double computeSpeed(double angle, double cameraHeight, double objectHeight) {
+    double distance = determineObjectDist(cameraHeight, objectHeight);
+    return Math.sqrt((16.1 * Math.pow(distance, 2)) / (distance * Math.tan(angle) - cameraHeight - objectHeight))
+        / Math.cos(angle);
+  }
+
+  /*
+   * Determine the distance an object is from the limelight given the camera's
+   * height
+   * off of the ground and the object's height off of the ground.
+   */
+  public static double determineObjectDist(double cameraHeight, double objectHeight) {
+    System.out.println("Distance: ");
+    ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
+    // 0.36 is mounting angle
+    System.out.println((objectHeight - cameraHeight) / (Math.tan(LimelightConstants.LL_MOUNT_ANGLE + ty)));
+    return (objectHeight - cameraHeight) / (Math.tan(LimelightConstants.LL_MOUNT_ANGLE + ty));
+  }
+
+
   /**
    * Sets the LED mode of the limelight.
    * 
@@ -136,7 +180,7 @@ public class LimelightInterface extends SubsystemBase {
    * 
    * @return whether there is a valid target
    */
-  public boolean hasValidTarget() {
+  public static boolean hasValidTarget() {
     return targetValid.getDouble(0) != 0.0;
   }
 
@@ -182,7 +226,7 @@ public class LimelightInterface extends SubsystemBase {
    * 
    * @return the vertical angle, +/-24.85 deg
    */
-  public double getTargetVertAngle() {
+  public static double getTargetVertAngle() {
     return vertAngle.getDouble(0);
   }
 

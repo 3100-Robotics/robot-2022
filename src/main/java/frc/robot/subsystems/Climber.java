@@ -63,7 +63,7 @@ public class Climber extends SubsystemBase {
 
     }
 
-    public static void toggleClimberSolenoids() {
+    public void toggleClimberSolenoids() {
 
         // leftClimberSolenoid.toggle();
         // rightClimberSolenoid.toggle();

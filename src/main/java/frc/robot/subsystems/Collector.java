@@ -14,12 +14,10 @@ import frc.robot.Constants.PneumaticsConstants;;
 //TODO: CHECK TO SEE IF LEAVING THE SOLENOID IN OFF/ON CHANGES BEHAVIOR
 public class Collector extends SubsystemBase {
 
-   // public static final Solenoid leftIntakeSolenoid = new
-   // Solenoid(PneumaticsModuleType.CTREPCM,
-   // PneumaticsConstants.leftIntakeSolenoidPort);
-   // public static final Solenoid rightIntakeSolenoid = new
-   // Solenoid(PneumaticsModuleType.CTREPCM,
-   // PneumaticsConstants.rightIntakeSolenoidPort);
+   public static final Solenoid leftIntakeSolenoid = new
+   Solenoid(PneumaticsModuleType.CTREPCM,
+   PneumaticsConstants.leftIntakeSolenoidPort);
+  
    public static final CANSparkMax collectorMotor = new CANSparkMax(MotorConstants.collectorMotorPort,
          MotorType.kBrushless);
    public CANSparkMax conveyorMotor = new CANSparkMax(MotorConstants.conveyorMotorPort,
@@ -33,22 +31,30 @@ public class Collector extends SubsystemBase {
 
          }
 
-   public static void deployCollector() {
+   public void deployCollector() {
 
       // Set Piston to extend/retract
-      // leftIntakeSolenoid.toggle();
-      // rightIntakeSolenoid.toggle();
+      leftIntakeSolenoid.toggle();
+    
    }
 
    public void groundCollect(double speed) {
 
+    //  deployCollector();
+      collectorMotor.set(speed);
+
+   }
+   public void reverseCollect(double speed) {
+
+     
       collectorMotor.set(speed);
 
    }
 
    public void conveyorRun(double speed) {
 
-      System.out.println("CONVEYOR");
+    // System.out.println("CONVEYOR");
+     // deployCollector();
       conveyorMotor.set(speed);
 
    }
