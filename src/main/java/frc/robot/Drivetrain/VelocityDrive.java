@@ -1,4 +1,4 @@
-package frc.robot.Drivetrain;
+package frc.robot.drivetrain;
 
 import java.util.function.DoubleSupplier;
 
@@ -7,18 +7,17 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 
-/**
- * Code should inline a command this simple with
- * {@link edu.wpi.first.wpilibj2.command.RunCommand}.
- */
 public class VelocityDrive extends CommandBase {
   private final Drive m_drive;
   private final DoubleSupplier m_forward;
   private final DoubleSupplier m_rotation;
 
+  //Experiment for some stuff, never got to test it
+
   /**
-   * Creates a new DefaultDrive.
+   * Creates a new Velocity Drive.
    *
    * @param subsystem The drive subsystem this command wil run on.
    * @param forward   The control input for driving forwards/backwards
@@ -33,7 +32,7 @@ public class VelocityDrive extends CommandBase {
 
   public void initalize() {
 
-    Drive.frontRight.selectProfileSlot(Constants.kSlot_Velocit, Constants.PID_PRIMARY);
+    Drive.frontRight.selectProfileSlot(DriveConstants.kSlot_Velocit, Constants.PID_PRIMARY);
 
   }
 

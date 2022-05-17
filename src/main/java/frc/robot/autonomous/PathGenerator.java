@@ -26,7 +26,13 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.TrajectoryConstants;
-import frc.robot.Drivetrain.Drive;
+import frc.robot.drivetrain.Drive;
+
+/**
+ * PathGenerator - A command to generate trajectories based on a given path
+ * @see https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/trajectory-tutorial-overview.html
+ * @param pathName A string that is accessed from the deploy/pathplanner folder
+*/
 
 public class PathGenerator extends CommandBase {
 

@@ -40,13 +40,13 @@ public class Collector extends SubsystemBase {
 
    public void groundCollect(double speed) {
 
-    //  deployCollector();
+      //deployCollector();
       collectorMotor.set(speed);
 
    }
    public void reverseCollect(double speed) {
 
-     
+    //  deployCollector();
       collectorMotor.set(speed);
 
    }
@@ -54,13 +54,13 @@ public class Collector extends SubsystemBase {
    public void conveyorRun(double speed) {
 
     // System.out.println("CONVEYOR");
-     // deployCollector();
       conveyorMotor.set(speed);
 
    }
 
    public void collectToShoot(double speed) {
 
+      
       collectorMotor.set(speed);
       conveyorMotor.set(speed);
 

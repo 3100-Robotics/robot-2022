@@ -1,15 +1,17 @@
 package frc.robot.autonomous.autoncommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Drivetrain.Drive;
+import frc.robot.drivetrain.Drive;
 
 public class AutoDrive extends CommandBase {
     public final Drive drive;
     private final double goal, speed;
+    private double time;
 
-    public AutoDrive(final double goalDistance, double speed, final Drive drive) {
+    public AutoDrive(double timeRun, double speed, final Drive drive) {
         this.drive = drive;
-        this.goal = goalDistance;
+        this.goal = timeRun;
         this.speed = speed;
  
 
@@ -17,6 +19,7 @@ public class AutoDrive extends CommandBase {
     }
 
     public void initialize() {
+        time = Timer.getFPGATimestamp();
        drive.resetEncoders();
      
     }
@@ -30,11 +33,15 @@ public class AutoDrive extends CommandBase {
 
         drive.autoArcadeDrive(speed, 0);
 
+       // System.out.println(drive.getAverageEncoderDistance());
+
     }
 
     public boolean isFinished() {
-        System.out.println(drive.getAverageEncoderDistance());
-        return (Math.abs(drive.getAverageEncoderDistance()) >= goal);
+        if (Timer.getFPGATimestamp() >= time + goal) {
+            return true;
+        }
+        return false;
     }
 
   

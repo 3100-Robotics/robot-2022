@@ -2,16 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Drivetrain;
+package frc.robot.drivetrain;
 
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -30,9 +24,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.MotorConstants;
+
+/**
+ * Drive - A subsytem to control the drive functions of the robot
+ * TODO: comment all of the individual functions in this class
+*/
 
 public class Drive extends SubsystemBase {
   
@@ -95,10 +93,10 @@ public class Drive extends SubsystemBase {
     rightVelo.setDouble(rightVel);
 
     
-    SmartDashboard.putNumber("LeftDistance", leftDist);
-    SmartDashboard.putNumber("RightDistance", rightDist);
-    SmartDashboard.putNumber("LeftVelocity", leftVel);
-    SmartDashboard.putNumber("RightVelocity", rightVel);
+    // SmartDashboard.putNumber("LeftDistance", leftDist);
+    // SmartDashboard.putNumber("RightDistance", rightDist);
+    // SmartDashboard.putNumber("LeftVelocity", leftVel);
+    // SmartDashboard.putNumber("RightVelocity", rightVel);
 
     m_odometry.update(
         m_gyro.getRotation2d(),
@@ -152,8 +150,19 @@ public class Drive extends SubsystemBase {
 
 
     forward = Math.copySign(forward*forward, forward);
-    turn = Math.copySign(turn*turn, turn);
+    turn = Math.copySign(Math.pow(turn, 3), turn);
      //turn *= turn * turn;
+
+     if(Math.abs(forward) > 0.9){
+
+      forward = Math.copySign(0.9, forward);
+
+     }
+     if(Math.abs(turn) > 0.9){
+
+      turn = Math.copySign(0.9, turn);
+
+     }
 
     // frontLeft.set(TalonFXControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, +turn);
     // frontRight.set(TalonFXControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, -turn);
@@ -163,6 +172,12 @@ public class Drive extends SubsystemBase {
   public void autoArcadeDrive(double forward, double turn){
 
     m_drive.arcadeDrive(forward, turn);
+
+  }
+
+  public void tankDrive(double left, double right){
+
+    m_drive.tankDrive(left, right);
 
   }
 

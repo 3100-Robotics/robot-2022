@@ -1,21 +1,16 @@
-package frc.robot.Drivetrain;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.drivetrain;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * Code should inline a command this simple with
- * {@link edu.wpi.first.wpilibj2.command.RunCommand}.
- */
 public class CurvyDrive extends CommandBase {
   private final Drive m_drive;
   private final XboxController m_controller;
 
   /**
-   * Creates a new DefaultDrive.
+   * Creates a new Curvature Drive.
    *
+   * @see https://www.reddit.com/r/FRC/comments/80679m/what_is_curvature_drive_cheesy_drive/
    * xSpeed, speed of the robot
    * zRotation, steers the robot
    * quickTurn, allows for turn in place

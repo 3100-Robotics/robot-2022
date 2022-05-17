@@ -4,7 +4,9 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Drivetrain.Drive;
+import frc.robot.drivetrain.Drive;
+import frc.robot.sensors.LimelightInterface;
+import frc.robot.sensors.LimelightInterface.LimelightLEDMode;
 
 public class LimeTurn extends CommandBase{
 
@@ -24,6 +26,7 @@ public class LimeTurn extends CommandBase{
 
     public void initialize(){
 
+        LimelightInterface.setLEDMode(LimelightLEDMode.ON);
         x = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         v = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
 
@@ -31,6 +34,7 @@ public class LimeTurn extends CommandBase{
 
     public void execute(){
   
+        LimelightInterface.setLEDMode(LimelightLEDMode.ON);
         if (v < 1.0)
         {
          // return;
@@ -41,17 +45,17 @@ public class LimeTurn extends CommandBase{
 
             x = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
             v = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-                m_drive.arcadeDrive(m_forward.getAsDouble(), 0.8 * Math.signum(x));
+                m_drive.autoArcadeDrive(m_forward.getAsDouble(), 0.8 * Math.signum(x));
 
             
                 
 
             }
-            while(Math.abs(x) > 2){
+            while(Math.abs(x) > 4){
 
                 x = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
                 v = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-                m_drive.arcadeDrive(m_forward.getAsDouble(), 0.68 * Math.signum(x));
+                m_drive.autoArcadeDrive(m_forward.getAsDouble(), 0.68 * Math.signum(x));
 
                
             }
@@ -63,7 +67,13 @@ public class LimeTurn extends CommandBase{
     }
     public boolean isFinished(){
 
+        
         return stop;
+    }
+    public void end(){
+
+        LimelightInterface.setLEDMode(LimelightLEDMode.OFF);
+
     }
 
 }

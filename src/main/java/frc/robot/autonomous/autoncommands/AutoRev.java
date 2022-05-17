@@ -39,7 +39,7 @@ public class AutoRev extends CommandBase {
    
 
     public void execute() {
-        shooter.shootPercent(top);
+        shooter.shootPercentAuton(top);
     
 
     }

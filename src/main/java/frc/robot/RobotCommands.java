@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import frc.robot.Drivetrain.Drive;
+import frc.robot.drivetrain.Drive;
 import frc.robot.autonomous.PathGenerator;
 import frc.robot.sensors.LimelightInterface;
 import frc.robot.subsystems.Climber;
@@ -25,17 +25,15 @@ public class RobotCommands {
 
     static Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
 
-    public final static StartEndCommand shootAdjusting = new StartEndCommand(
-        () -> m_shooter.shoot(),
-        () -> m_shooter.stopShoot(),
-    m_shooter
-    );
-
-    // public final static StartEndCommand shootRPM = new StartEndCommand(
-    //     () -> m_shooter.setVelocitySpeed(4000),
+    // public final static StartEndCommand shootAdjusting = new StartEndCommand(
+    //     () -> m_shooter.shoot(),
     //     () -> m_shooter.stopShoot(),
     // m_shooter
     // );
+
+    public final static InstantCommand shootRPM = new InstantCommand(
+        () -> m_shooter.setRPM(4000)
+    );
 
     public final static StartEndCommand turnTurretNeg = new StartEndCommand(
         () -> m_turret.turn(-0.2),
@@ -74,29 +72,25 @@ public class RobotCommands {
     );
 
     public final static StartEndCommand groundCollect = new StartEndCommand(
-        () -> m_collector.groundCollect(0.4),
-        () -> m_collector.groundCollect(0.0),
-    m_collector
+        () -> m_collector.groundCollect(0.9),
+        () -> m_collector.groundCollect(0.0)
     );
     public final static StartEndCommand reverseGroundCollect = new StartEndCommand(
-        () -> m_collector.reverseCollect(-0.4),
-        () -> m_collector.reverseCollect(0.0),
-    m_collector
+        () -> m_collector.reverseCollect(-0.9),
+        () -> m_collector.reverseCollect(0.0)
     );
 
     public final static StartEndCommand conveyorRun = new StartEndCommand(
-        () -> m_collector.conveyorRun(0.4),
-        () -> m_collector.conveyorRun(0.0),
-    m_collector
+        () -> m_collector.conveyorRun(1.0),
+        () -> m_collector.conveyorRun(0.0)
     );
     public final static StartEndCommand reverseConveyorRun = new StartEndCommand(
         () -> m_collector.conveyorRun(-0.8),
-        () -> m_collector.conveyorRun(0.0),
-    m_collector
+        () -> m_collector.conveyorRun(0.0)
     );
 
     public final static StartEndCommand collectToShoot = new StartEndCommand(
-        () -> m_collector.collectToShoot(0.4),
+        () -> m_collector.collectToShoot(0.6),
         () -> m_collector.collectToShoot(0.0),
     m_collector
     );
@@ -106,6 +100,27 @@ public class RobotCommands {
         () -> m_shooter.stopShoot(),
     m_shooter
     );
+    public final static StartEndCommand reverseShooter = new StartEndCommand(
+        () -> m_shooter.shootPercentAuton(-0.5),
+        () -> m_shooter.stopShoot(),
+    m_shooter
+    );
+    // public final static StartEndCommand testShoot = new StartEndCommand(
+    //     () -> m_shooter.shootPercentAuton(0.9),
+    //     () -> m_shooter.shootPercentAuton(0.0),
+    // m_shooter
+    // );
+    public final static InstantCommand testShoot = new InstantCommand(
+        () -> m_shooter.shootPercentAuton(0.9)
+    );
+    
+
+    public final static StartEndCommand setOpenLoop = new StartEndCommand(
+        () -> m_shooter.setOpenLoop(0.5),
+        () -> m_shooter.stopShoot(),
+    m_shooter
+    );
+
     
 
     // public final static StartEndCommand shootVel = new StartEndCommand(
@@ -125,6 +140,14 @@ public class RobotCommands {
     public final static InstantCommand compressorEnable = new InstantCommand(
     () -> pcmCompressor.enableDigital()
     );
+    public final static InstantCommand resetClimberSensors = new InstantCommand(
+    () -> m_climber.reset(),
+    m_climber
+    );
+    public final static InstantCommand printDistance = new InstantCommand(
+    () -> m_shooter.print()
+    );
+    
 
   
 

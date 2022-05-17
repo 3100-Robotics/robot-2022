@@ -12,17 +12,14 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.util.Util;
 
 public class LimelightInterface extends SubsystemBase {
 
   // Limelight docs say to use at least 11ms
   private static final double imageCaptureLatency = 11; // ms
 
-  private double tv, tx;
-
   private static double ty;
-
-  private double ta;
   private static NetworkTableEntry targetValid;
   private NetworkTableEntry horizAngle;
   private static NetworkTableEntry vertAngle;
@@ -36,7 +33,7 @@ public class LimelightInterface extends SubsystemBase {
   private NetworkTableEntry pipelineGet;
   private NetworkTableEntry pipelineSet;
   private NetworkTableEntry camtran;
-  private NetworkTableEntry ledMode;
+  private static NetworkTableEntry ledMode;
   private NetworkTableEntry camMode;
   private NetworkTableEntry streamingMode;
   private NetworkTableEntry snapshot;
@@ -106,50 +103,12 @@ public class LimelightInterface extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-
-  public static double getRobotToTargetDistance() {
-		return (LimelightConstants.LL_TARGET_HEIGHT - LimelightConstants.LL_MOUNT_HEIGHT) / Math.tan(Math.toRadians(LimelightConstants.LL_MOUNT_ANGLE + getTargetVertAngle()));
-	}
-	
-	// public double getShooterLaunchVelocity() {
-	// 	double g = 9.81;
-	// 	double y = LimelightConstants.LL_TARGET_HEIGHT;
-	// 	double x = getRobotToTargetDistance();
-	// 	double launchAngle = LimelightConstants.SHOOTER_LAUNCH_ANGLE; // Set to proper value
-	// 	double tanA = Math.tan(Math.toRadians(launchAngle));
-	// 	double upper = Math.sqrt(g) * Math.sqrt(x) * Math.sqrt(Math.pow(tanA, 2) + 1);
-	// 	double lower = Math.sqrt(2 * tanA - ((2 * y) / x));
-	// 	return Units.metersToFeet(upper / lower);
-	// }
-
-  // For the shooter. Given what the limelight sees and the shooter angle, compute
-  // the desired initial speed for the shooter.
-  public static double computeSpeed(double angle, double cameraHeight, double objectHeight) {
-    double distance = determineObjectDist(cameraHeight, objectHeight);
-    return Math.sqrt((16.1 * Math.pow(distance, 2)) / (distance * Math.tan(angle) - cameraHeight - objectHeight))
-        / Math.cos(angle);
-  }
-
-  /*
-   * Determine the distance an object is from the limelight given the camera's
-   * height
-   * off of the ground and the object's height off of the ground.
-   */
-  public static double determineObjectDist(double cameraHeight, double objectHeight) {
-    System.out.println("Distance: ");
-    ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
-    // 0.36 is mounting angle
-    System.out.println((objectHeight - cameraHeight) / (Math.tan(LimelightConstants.LL_MOUNT_ANGLE + ty)));
-    return (objectHeight - cameraHeight) / (Math.tan(LimelightConstants.LL_MOUNT_ANGLE + ty));
-  }
-
-
   /**
    * Sets the LED mode of the limelight.
    * 
    * @param mode The LED mode
    */
-  public void setLEDMode(LimelightLEDMode mode) {
+  public static void setLEDMode(LimelightLEDMode mode) {
     ledMode.forceSetNumber(mode.modeID);
   }
 
@@ -324,13 +283,13 @@ public class LimelightInterface extends SubsystemBase {
   public double getCrosshairX(LimelightCrosshair crosshair) {
     NetworkTableEntry entry;
     switch (crosshair) {
-    default:
-    case A:
-      entry = crosshairAX;
-      break;
-    case B:
-      entry = crosshairBX;
-      break;
+      default:
+      case A:
+        entry = crosshairAX;
+        break;
+      case B:
+        entry = crosshairBX;
+        break;
     }
     return entry.getDouble(0);
   }
@@ -344,13 +303,13 @@ public class LimelightInterface extends SubsystemBase {
   public double getCrosshairY(LimelightCrosshair crosshair) {
     NetworkTableEntry entry;
     switch (crosshair) {
-    default:
-    case A:
-      entry = crosshairAY;
-      break;
-    case B:
-      entry = crosshairBY;
-      break;
+      default:
+      case A:
+        entry = crosshairAY;
+        break;
+      case B:
+        entry = crosshairBY;
+        break;
     }
     return entry.getDouble(0);
   }
@@ -364,16 +323,16 @@ public class LimelightInterface extends SubsystemBase {
   public double getRawContourX(int contourID) {
     NetworkTableEntry entry;
     switch (contourID) {
-    default:
-    case 0:
-      entry = rawContour0X;
-      break;
-    case 1:
-      entry = rawContour1X;
-      break;
-    case 2:
-      entry = rawContour2X;
-      break;
+      default:
+      case 0:
+        entry = rawContour0X;
+        break;
+      case 1:
+        entry = rawContour1X;
+        break;
+      case 2:
+        entry = rawContour2X;
+        break;
     }
     return entry.getDouble(0);
   }
@@ -387,16 +346,16 @@ public class LimelightInterface extends SubsystemBase {
   public double getRawContourY(int contourID) {
     NetworkTableEntry entry;
     switch (contourID) {
-    default:
-    case 0:
-      entry = rawContour0Y;
-      break;
-    case 1:
-      entry = rawContour1Y;
-      break;
-    case 2:
-      entry = rawContour2Y;
-      break;
+      default:
+      case 0:
+        entry = rawContour0Y;
+        break;
+      case 1:
+        entry = rawContour1Y;
+        break;
+      case 2:
+        entry = rawContour2Y;
+        break;
     }
     return entry.getDouble(0);
   }
@@ -410,16 +369,16 @@ public class LimelightInterface extends SubsystemBase {
   public double getRawContourArea(int contourID) {
     NetworkTableEntry entry;
     switch (contourID) {
-    default:
-    case 0:
-      entry = rawContour0Area;
-      break;
-    case 1:
-      entry = rawContour1Area;
-      break;
-    case 2:
-      entry = rawContour2Area;
-      break;
+      default:
+      case 0:
+        entry = rawContour0Area;
+        break;
+      case 1:
+        entry = rawContour1Area;
+        break;
+      case 2:
+        entry = rawContour2Area;
+        break;
     }
     return entry.getDouble(0);
   }
@@ -433,16 +392,16 @@ public class LimelightInterface extends SubsystemBase {
   public double getRawContourSkew(int contourID) {
     NetworkTableEntry entry;
     switch (contourID) {
-    default:
-    case 0:
-      entry = rawContour0Skew;
-      break;
-    case 1:
-      entry = rawContour1Skew;
-      break;
-    case 2:
-      entry = rawContour2Skew;
-      break;
+      default:
+      case 0:
+        entry = rawContour0Skew;
+        break;
+      case 1:
+        entry = rawContour1Skew;
+        break;
+      case 2:
+        entry = rawContour2Skew;
+        break;
     }
     return entry.getDouble(0);
   }
@@ -481,4 +440,60 @@ public class LimelightInterface extends SubsystemBase {
   public enum LimelightCrosshair {
     A, B;
   }
+
+  /**
+   * Calculates the distance to the target[hoop] based on the Y of the target
+   * given by the limelight.
+   * Does so by taking the value the limelight gives from it's 'ty' network table
+   * entry
+   * (table for sending arbitrary values between the limelight, robot, and driver
+   * station)
+   * and putting it through the trigonometrical coding and algorithms
+   *
+   * @return The distance to the target(hoop) in inches
+   */
+  public static double getDistance() {
+    return Util.findDist(LimelightConstants.LIMELIGHT_HEIGHT, LimelightConstants.LIMELIGHT_ELEVATION,
+        LimelightConstants.BASKET_HEIGHT, getTargetVertAngle());
+  }
+
+  public static double getRobotToTargetDistance() {
+    return (LimelightConstants.LL_TARGET_HEIGHT - LimelightConstants.LL_MOUNT_HEIGHT)
+        / Math.tan(Math.toRadians(LimelightConstants.LL_MOUNT_ANGLE + getTargetVertAngle()));
+  }
+
+  // public double getShooterLaunchVelocity() {
+  // double g = 9.81;
+  // double y = LimelightConstants.LL_TARGET_HEIGHT;
+  // double x = getRobotToTargetDistance();
+  // double launchAngle = LimelightConstants.SHOOTER_LAUNCH_ANGLE; // Set to
+  // proper value
+  // double tanA = Math.tan(Math.toRadians(launchAngle));
+  // double upper = Math.sqrt(g) * Math.sqrt(x) * Math.sqrt(Math.pow(tanA, 2) +
+  // 1);
+  // double lower = Math.sqrt(2 * tanA - ((2 * y) / x));
+  // return Units.metersToFeet(upper / lower);
+  // }
+
+  // For the shooter. Given what the limelight sees and the shooter angle, compute
+  // the desired initial speed for the shooter.
+  public static double computeSpeed(double angle, double cameraHeight, double objectHeight) {
+    double distance = determineObjectDist(cameraHeight, objectHeight);
+    return Math.sqrt((16.1 * Math.pow(distance, 2)) / (distance * Math.tan(angle) - cameraHeight - objectHeight))
+        / Math.cos(angle);
+  }
+
+  /*
+   * Determine the distance an object is from the limelight given the camera's
+   * height
+   * off of the ground and the object's height off of the ground.
+   */
+  public static double determineObjectDist(double cameraHeight, double objectHeight) {
+    System.out.println("Distance: ");
+    ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
+    // 0.36 is mounting angle
+    System.out.println((objectHeight - cameraHeight) / (Math.tan(LimelightConstants.LL_MOUNT_ANGLE + ty)));
+    return (objectHeight - cameraHeight) / (Math.tan(LimelightConstants.LL_MOUNT_ANGLE + ty));
+  }
+
 }

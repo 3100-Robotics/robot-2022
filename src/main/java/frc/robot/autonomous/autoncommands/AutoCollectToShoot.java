@@ -27,12 +27,15 @@ public class AutoCollectToShoot extends CommandBase {
 
     public void initialize() {
         time = Timer.getFPGATimestamp();
+        m_collecter.deployCollector();
     }
 
     public void execute() {
 
-        m_collecter.conveyorRun(m_convey);
-        m_collecter.groundCollect(m_collect);
+        
+        m_collecter.collectToShoot(m_convey);
+        // m_collecter.conveyorRun(m_convey);
+        // m_collecter.groundCollect(m_collect);
 
       //  Shooter.setVelocitySpeed(m_speed);
 
@@ -41,6 +44,8 @@ public class AutoCollectToShoot extends CommandBase {
     public boolean isFinished() {
 
         if (Timer.getFPGATimestamp() >= time + time2) {
+            m_collecter.collectToShoot(0);
+            m_collecter.deployCollector();
             return true;
         }
         return false;

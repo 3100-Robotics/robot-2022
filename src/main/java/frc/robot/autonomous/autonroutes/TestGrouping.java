@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotCommands;
 import frc.robot.RobotContainer;
-import frc.robot.Drivetrain.Drive;
+import frc.robot.drivetrain.Drive;
 import frc.robot.autonomous.PathGenerator;
 import frc.robot.autonomous.autoncommands.AutoAdjustHood;
 import frc.robot.autonomous.autoncommands.AutoCollectToShoot;
@@ -29,8 +29,8 @@ public class TestGrouping extends SequentialCommandGroup {
                 new AutoDrive(4, 0.6, drive),
                 new AutoCollectToShoot(collector, 2, 0.6, 0.6),
                 new AutoTurnToAngle(180, 0.4, drive),
-                new AutoRev(shooter, 2, 0.65),
-                new AutoShoot(shooter, 2, 0.65)
+                new AutoRev(shooter, 2, 0.65)
+             //   new AutoShoot(shooter, 2, 0.65)
 
                   //  PathGenerator.generateTrajectory("Testing A Curve")
                    //60-108
